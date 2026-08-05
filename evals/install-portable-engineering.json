@@ -2,59 +2,105 @@
   "skill": "install-portable-engineering",
   "cases": [
     {
-      "name": "fresh_global_bootstrap",
+      "name": "fresh_global_install",
       "prompt": "使用 $install-portable-engineering 初始化我的 Codex 通用工程规则和 Skills。",
-      "setup": "bootstrap 由内置 skill-installer 从固定稳定 tag 安装；用户级目录没有其它 portable engineering 内容。",
+      "setup": "本入口由内置 skill-installer 从固定稳定 tag 安装；用户级目录没有其它 portable engineering 内容。",
       "expect": [
         "验证最新稳定 Release、tag、commit 和 source manifest",
-        "读取同 Release 的 update-portable-engineering workflow",
         "安装全部 source Skills、规则 managed block 和 receipt",
-        "提示后续使用 updater"
+        "后续更新仍使用同一个入口"
       ],
       "forbid": [
         "读取当前消费仓库 pin",
         "复制 repository adapters",
+        "安装独立 updater",
         "跟随 main"
       ]
     },
     {
-      "name": "delegate_legacy_adoption",
-      "prompt": "安装 portable engineering，我以前装过旧版但没有 receipt。",
-      "setup": "旧 Skills 和规则与历史稳定 Release 精确一致；bootstrap 已安装，updater 尚未安装。",
+      "name": "update_from_valid_receipt",
+      "prompt": "使用 $install-portable-engineering 更新本机通用规则和 Skills。",
+      "setup": "GitHub 最新稳定 Release 为 v0.3.0；receipt 登记 v0.2.1，所有 installed digest 与 receipt 一致，用户还有其它来源的 Skills。",
       "expect": [
-        "委托同 Release updater 执行 historical digest adoption",
-        "补齐 updater 和 receipt",
-        "不要求用户填写旧 tag"
+        "验证稳定 Release、tag、commit 和 source manifest",
+        "事务式更新本 source 管理的规则和 Skills",
+        "最后更新 receipt 并保留其它来源 Skills"
       ],
       "forbid": [
-        "把任意同名目录直接接管",
-        "在 updater 校验前覆盖旧安装"
+        "要求另行调用 updater",
+        "修改 repository adapters",
+        "覆盖其它来源 Skills"
       ]
     },
     {
-      "name": "reject_missing_or_mismatched_updater",
-      "prompt": "初始化 portable engineering。",
-      "setup": "Release 缺少 updater，或 updater 目录名、frontmatter、symlink 边界不合法。",
+      "name": "adopt_exact_legacy_install",
+      "prompt": "安装或更新 portable engineering，我以前装过旧版但没有 receipt。",
+      "setup": "八个已安装 Skill 和规则 managed block 与历史稳定 v0.1.0 完全一致，本入口已由固定 tag 安装。",
       "expect": [
-        "在用户级 durable write 前停止",
-        "报告 Release 完整性 blocker"
+        "自动查询历史稳定 Release 并完成精确 digest adoption",
+        "安装目标 Release 缺失内容并更新全部受管内容",
+        "成功后写入首份 receipt"
       ],
       "forbid": [
-        "复制一份简化安装逻辑继续",
-        "使用其它 Release 或默认分支"
+        "要求用户填写旧 tag 或 commit",
+        "在验证完成前写 receipt",
+        "把任意同名目录视为受管内容"
       ]
     },
     {
-      "name": "preserve_unmanaged_content",
-      "prompt": "安装全局 portable engineering。",
-      "setup": "用户级目录包含其它来源 Skills，并有一个无法匹配历史 Release 的同名 Skill。",
+      "name": "block_local_modification",
+      "prompt": "更新 portable engineering。",
+      "setup": "receipt 有效，但 knowledge-sync installed tree digest 与 receipt 不一致。",
       "expect": [
-        "保留其它来源 Skills",
-        "因同名 ownership 冲突整体停止并报告"
+        "在第一次 durable write 前停止",
+        "报告被修改的 Skill 和 digest 冲突",
+        "保留当前全部安装"
       ],
       "forbid": [
-        "扩大 receipt ownership",
-        "覆盖或 merge 冲突目录"
+        "覆盖或 merge 本地修改",
+        "只更新未冲突的其它 Skill"
+      ]
+    },
+    {
+      "name": "check_only_is_read_only",
+      "prompt": "用 $install-portable-engineering 只检查是否有新版本。",
+      "setup": "存在更新且所有 preflight 校验通过。",
+      "expect": [
+        "报告 installed version、target version 和更新计划",
+        "保持用户级规则、Skills 和 receipt 不变"
+      ],
+      "forbid": [
+        "创建 backup",
+        "替换 Skill",
+        "写入 receipt"
+      ]
+    },
+    {
+      "name": "retire_v020_updater_safely",
+      "prompt": "合并入口后更新到最新版。",
+      "setup": "旧 receipt 登记 v0.2.0 update-portable-engineering，installed digest 与该 Release 完全一致。",
+      "expect": [
+        "把旧 updater 纳入同一事务的 backup",
+        "删除已被统一入口取代的未修改 updater",
+        "新 receipt 不再登记 updater"
+      ],
+      "forbid": [
+        "删除无法证明来源或已修改的 updater",
+        "把例外扩展到其它上游删除的 Skill"
+      ]
+    },
+    {
+      "name": "fail_closed_on_auth_or_release_mismatch",
+      "prompt": "安装或更新 portable engineering。",
+      "setup": "private GitHub 认证失败，或 Release tag、checkout commit 与 source manifest version 不一致。",
+      "expect": [
+        "停止并报告认证或完整性 blocker",
+        "保持现有安装不变"
+      ],
+      "forbid": [
+        "回退到 main",
+        "使用公开镜像或消费仓库副本",
+        "输出 credential"
       ]
     }
   ]
