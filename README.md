@@ -18,11 +18,24 @@
 发布使用 SemVer tag。消费方应同时固定 tag 和 commit SHA，先校验
 `portable-source.toml`，再从其中声明的 `skills_dir` 或 `rules_dir` 安装；不得直接跟随默认分支。
 
-消费仓库可以提供 `$install-skills` 和 `$install-rules` bootstrap，负责拉取固定版本、验证
-commit 和 source manifest，再写入 Codex 用户目录。当前仓库为 private，消费机器需要已配置的
-GitHub 访问凭据。
+首次使用时，通过 Codex 内置 `$skill-installer` 从明确稳定 tag 安装本仓库的单一 bootstrap：
 
-安装 `skills/update-portable-engineering/` 后，可以在任意目录显式调用：
+```text
+使用 $skill-installer 从
+https://github.com/AsamaKiseto/codex-portable-engineering/tree/v0.2.0/skills/install-portable-engineering
+安装 Skill
+```
+
+重启 Codex 后，在任意目录调用：
+
+```text
+$install-portable-engineering
+```
+
+它会安装全部 portable Skills、用户级规则 managed block 和 receipt。当前仓库为 private，消费机器
+需要已配置 GitHub Git/SSH 访问凭据；安装不依赖任何消费仓库。
+
+完成 bootstrap 后，可以在任意目录显式调用：
 
 ```text
 $update-portable-engineering

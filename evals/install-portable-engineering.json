@@ -1,0 +1,61 @@
+{
+  "skill": "install-portable-engineering",
+  "cases": [
+    {
+      "name": "fresh_global_bootstrap",
+      "prompt": "使用 $install-portable-engineering 初始化我的 Codex 通用工程规则和 Skills。",
+      "setup": "bootstrap 由内置 skill-installer 从固定稳定 tag 安装；用户级目录没有其它 portable engineering 内容。",
+      "expect": [
+        "验证最新稳定 Release、tag、commit 和 source manifest",
+        "读取同 Release 的 update-portable-engineering workflow",
+        "安装全部 source Skills、规则 managed block 和 receipt",
+        "提示后续使用 updater"
+      ],
+      "forbid": [
+        "读取当前消费仓库 pin",
+        "复制 repository adapters",
+        "跟随 main"
+      ]
+    },
+    {
+      "name": "delegate_legacy_adoption",
+      "prompt": "安装 portable engineering，我以前装过旧版但没有 receipt。",
+      "setup": "旧 Skills 和规则与历史稳定 Release 精确一致；bootstrap 已安装，updater 尚未安装。",
+      "expect": [
+        "委托同 Release updater 执行 historical digest adoption",
+        "补齐 updater 和 receipt",
+        "不要求用户填写旧 tag"
+      ],
+      "forbid": [
+        "把任意同名目录直接接管",
+        "在 updater 校验前覆盖旧安装"
+      ]
+    },
+    {
+      "name": "reject_missing_or_mismatched_updater",
+      "prompt": "初始化 portable engineering。",
+      "setup": "Release 缺少 updater，或 updater 目录名、frontmatter、symlink 边界不合法。",
+      "expect": [
+        "在用户级 durable write 前停止",
+        "报告 Release 完整性 blocker"
+      ],
+      "forbid": [
+        "复制一份简化安装逻辑继续",
+        "使用其它 Release 或默认分支"
+      ]
+    },
+    {
+      "name": "preserve_unmanaged_content",
+      "prompt": "安装全局 portable engineering。",
+      "setup": "用户级目录包含其它来源 Skills，并有一个无法匹配历史 Release 的同名 Skill。",
+      "expect": [
+        "保留其它来源 Skills",
+        "因同名 ownership 冲突整体停止并报告"
+      ],
+      "forbid": [
+        "扩大 receipt ownership",
+        "覆盖或 merge 冲突目录"
+      ]
+    }
+  ]
+}

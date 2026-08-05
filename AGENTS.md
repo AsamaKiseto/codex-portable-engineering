@@ -19,6 +19,8 @@
 - 修改 Skill 时校验 `SKILL.md` 和 `agents/openai.yaml`，必要时同步同名 eval。
 - updater 变更必须验证首次 historical-release adoption、receipt ownership、本地修改拒绝、规则
   managed block 保留和 self-update-last 事务顺序。
+- bootstrap 只负责验证 source 并进入同 Release updater workflow，不复制 updater 的安装、
+  adoption、receipt 或事务正文。
 - 修改规则时保持规则与消费仓库事实分离，并重新校验精确渲染 SHA256。
 - 发布使用 SemVer tag；已经被消费仓库固定的 tag 不得移动或重写。
 - 消费仓库必须同时固定 tag 和 commit SHA，不跟随默认分支。

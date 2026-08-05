@@ -19,10 +19,10 @@
     {
       "name": "adopt_exact_legacy_install",
       "prompt": "第一次运行 updater，直接更新到最新版。",
-      "setup": "receipt 不存在；八个已安装 Skill 和规则 managed block 与历史稳定 v0.1.0 完全一致；最新版新增 updater。",
+      "setup": "receipt 不存在；八个已安装 Skill 和规则 managed block 与历史稳定 v0.1.0 完全一致；最新版新增 bootstrap 和 updater。",
       "expect": [
         "自动查询历史稳定 Release 并完成精确 digest adoption",
-        "安装缺失 updater 并更新全部受管内容",
+        "安装缺失 bootstrap、updater 并更新全部受管内容",
         "成功后写入首份 receipt"
       ],
       "forbid": [
