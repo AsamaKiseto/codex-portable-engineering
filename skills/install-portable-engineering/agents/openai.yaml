@@ -1,4 +1,4 @@
 interface:
-  display_name: "安装 Portable Engineering"
-  short_description: "首次安装全局通用规则、Skills 与安全更新入口"
-  default_prompt: "使用 $install-portable-engineering 安装全局通用规则和 Skills。"
+  display_name: "安装或更新 Portable Engineering"
+  short_description: "安装、接管或安全升级全局通用规则与 Skills"
+  default_prompt: "使用 $install-portable-engineering 安装或更新全局通用规则和 Skills。"
