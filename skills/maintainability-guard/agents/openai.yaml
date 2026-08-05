@@ -1,0 +1,7 @@
+interface:
+  display_name: "Maintainability Guard"
+  short_description: "Review or refactor bounded code while preserving contracts"
+  default_prompt: "Use $maintainability-guard with explicit action and scope to assess or refactor this bounded code while preserving repository contracts and protected surfaces."
+
+policy:
+  allow_implicit_invocation: true

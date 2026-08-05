@@ -1,0 +1,10 @@
+format_version = 1
+name = "codex-engineering-baseline"
+version = "1.0.0"
+target = "global_agents_managed_block"
+modules = [
+  "engineering-baseline.md",
+  "commenting.md",
+  "compatibility.md",
+  "verification.md",
+]

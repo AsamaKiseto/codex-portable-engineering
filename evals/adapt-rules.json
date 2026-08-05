@@ -1,0 +1,85 @@
+{
+  "skill": "adapt-rules",
+  "cases": [
+    {
+      "name": "remove_verified_global_duplicate",
+      "prompt": "适配这个仓库的规则并删除重复项。",
+      "setup": "用户级 managed block digest 有效；仓库根 AGENTS.md 逐字重复其中一条通用规则，且没有额外范围或约束。",
+      "expect": [
+        "删除仓库中的精确重复正文",
+        "保留用户级 managed block 为通用 owner",
+        "报告删除依据"
+      ],
+      "forbid": [
+        "改写用户级 managed block",
+        "创建 rule-adapters 目录"
+      ]
+    },
+    {
+      "name": "invalid_global_block_blocks_deletion",
+      "prompt": "把仓库规则精简成只保留专用规则。",
+      "setup": "用户级 managed block 缺失或 header digest 与 body 不匹配。",
+      "expect": [
+        "完成规则分类审计",
+        "保留仓库中可能重复的规则",
+        "报告需要先安装或修复通用规则"
+      ],
+      "forbid": [
+        "在无有效全局 owner 时删除仓库规则",
+        "静默修复用户级文件"
+      ]
+    },
+    {
+      "name": "retain_explicit_repository_override",
+      "prompt": "适配规则；这个仓库的注释必须使用英文。",
+      "setup": "有效通用规则默认使用项目约定语言；仓库有明确英文注释要求和原因。",
+      "expect": [
+        "保留仓库级显式覆盖",
+        "记录覆盖原因、范围和被覆盖 baseline"
+      ],
+      "forbid": [
+        "删除冲突规则",
+        "修改通用 pack 迎合单仓库"
+      ]
+    },
+    {
+      "name": "keep_local_rule_near_subtree",
+      "prompt": "整理所有 AGENTS.md。",
+      "setup": "子目录 AGENTS.md 规定该子系统独有的生成文件和测试约束。",
+      "expect": [
+        "把局部约束留在最近的目录级 AGENTS.md",
+        "验证作用域没有扩大"
+      ],
+      "forbid": [
+        "把子系统事实上浮到全局或仓库根",
+        "只因引用较少就删除规则"
+      ]
+    },
+    {
+      "name": "keep_repository_runtime_facts",
+      "prompt": "将能通用的规则全部抽出去。",
+      "setup": "仓库根规则包含 conda 环境、cache 路径、pytest 命令、knowledge map 和 artifact contract。",
+      "expect": [
+        "将这些内容分类为 repository_specific",
+        "保留在仓库规则或其既有 owner"
+      ],
+      "forbid": [
+        "把仓库路径或业务 contract 写入用户级规则",
+        "删除完成标准"
+      ]
+    },
+    {
+      "name": "do_not_use_command_policy_for_prose",
+      "prompt": "把通用规则装进 ~/.codex/rules。",
+      "setup": "目标内容是编码、注释和验证 instruction prose。",
+      "expect": [
+        "说明 prose 应由用户级 AGENTS.md 承载",
+        "保留 .codex/rules 给命令执行 permission policy"
+      ],
+      "forbid": [
+        "创建 .rules prose 文件",
+        "混淆 instruction precedence 与 command permission"
+      ]
+    }
+  ]
+}

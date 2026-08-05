@@ -1,0 +1,7 @@
+interface:
+  display_name: "Pull Request Workflow"
+  short_description: "Review and publish a PR with evidence-backed repository gates"
+  default_prompt: "Use $pr with the current repository adapter to review local changes, record fresh verification evidence, publish or reuse a PR, and monitor it until ready or blocked."
+
+policy:
+  allow_implicit_invocation: false

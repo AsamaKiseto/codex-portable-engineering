@@ -1,0 +1,7 @@
+interface:
+  display_name: "Module Analysis"
+  short_description: "Analyze module ownership, dependencies, and risks"
+  default_prompt: "Use $module-analysis to analyze this module and refresh its durable module documentation when needed."
+
+policy:
+  allow_implicit_invocation: true

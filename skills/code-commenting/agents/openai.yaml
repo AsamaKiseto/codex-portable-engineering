@@ -1,0 +1,7 @@
+interface:
+  display_name: "Code Commenting"
+  short_description: "Explain non-trivial code intent and invariants"
+  default_prompt: "Use $code-commenting to review and improve comments for the non-trivial code changed in this task."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Knowledge Sync"
+  short_description: "Map code changes to durable documentation owners"
+  default_prompt: "Use $knowledge-sync to map these changes to the repository durable documentation owners."
+
+policy:
+  allow_implicit_invocation: true

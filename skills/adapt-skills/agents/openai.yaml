@@ -1,0 +1,4 @@
+interface:
+  display_name: "适配仓库 Skills"
+  short_description: "基于仓库证据生成 portable Skill adapters"
+  default_prompt: "分析当前仓库并为选定的 portable Skills 生成 repository adapters。"

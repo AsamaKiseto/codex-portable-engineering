@@ -1,0 +1,7 @@
+interface:
+  display_name: "Trace Provenance"
+  short_description: "Trace runtime provenance with evidence, integrity, and redaction"
+  default_prompt: "Use $trace-provenance in report-only mode to identify the run, compare candidate sources, and trace redacted evidence through producers and consumers."
+
+policy:
+  allow_implicit_invocation: true

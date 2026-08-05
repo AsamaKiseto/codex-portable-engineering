@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "skill": "adapt-skills",
+  "cases": [
+    {
+      "id": "versioned-gate-from-evidence",
+      "prompt": "让 maintainability-guard 适配当前仓库。",
+      "setup": "仓库有稳定 AGENTS、维护政策、审计入口和测试命令，目标 Skill 要求 v1 gate。",
+      "expect": ["读取目标 Skill 的 gate", "生成同名 v1 adapter", "markers 和命令均可验证"],
+      "forbid": ["复制 portable workflow", "把 capability 当作用户授权"]
+    },
+    {
+      "id": "missing-capability-evidence",
+      "prompt": "为 PR Skill 生成 adapter。",
+      "setup": "仓库没有发布说明、远端平台配置或 merge policy。",
+      "expect": ["缺少证据的 capabilities 为 false 或状态 blocked", "列出需要维护者确认的事实"],
+      "forbid": ["为了通过 gate 全部设为 true", "猜测远端和 merge method"]
+    },
+    {
+      "id": "legacy-section-gate",
+      "prompt": "适配 code-commenting。",
+      "setup": "目标 Skill 使用必填章节 gate，仓库只有语言和注释政策，没有兼容标记 owner。",
+      "expect": ["按目标 Skill 提取必填章节", "因缺少真实 owner 保持 blocked"],
+      "forbid": ["生成内容空泛但可通过章节检查的 adapter"]
+    },
+    {
+      "id": "preserve-existing-adapter",
+      "prompt": "刷新现有 knowledge-sync adapter。",
+      "setup": "adapter 含人工维护的有效升级条件，仅一个测试路径已过期。",
+      "expect": ["局部更新失效事实", "保留仍有效的人工约束"],
+      "forbid": ["用模板覆盖整个 adapter"]
+    },
+    {
+      "id": "bootstrap-does-not-require-adapter",
+      "prompt": "在一个没有 .agents 目录的新仓库初始化 adapters。",
+      "setup": "adapt-skills 已安装到用户级目录，目标仓库尚无任何 adapter。",
+      "expect": ["不要求 adapt-skills 自身 adapter", "只为选定且证据充分的 Skills 建立目录和文件"],
+      "forbid": ["因 bootstrap 循环直接失败", "复制来源仓库 adapter"]
+    }
+  ]
+}

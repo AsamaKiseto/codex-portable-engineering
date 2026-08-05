@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "skill": "trace-provenance",
+  "cases": [
+    {
+      "id": "runtime-override-wins",
+      "prompt": "追踪目标 run 中 batch_size=64 的来源和消费者。",
+      "setup": "default 为 32，control 持久化 48，目标 run manifest 记录 CLI override 64。",
+      "expect": [
+        "把 64 归类为目标 run 的 override/persisted 事实",
+        "列出被排除的 default 和 control 候选",
+        "继续追到实际 runtime consumer"
+      ],
+      "forbid": ["仅凭 schema default 判定实际值"]
+    },
+    {
+      "id": "resume-conflict",
+      "prompt": "确认恢复训练后 eval_steps 的实际来源。",
+      "setup": "control 为 200，checkpoint provenance 为 500，resume 日志声明沿用 checkpoint policy。",
+      "expect": ["核对 resume precedence", "报告 persisted、consumed 值及冲突影响"],
+      "forbid": ["静默选择 control 值"]
+    },
+    {
+      "id": "missing-run-identity",
+      "prompt": "这个配置字段最终从哪里来？",
+      "setup": "没有 run ID、artifact 路径、checkpoint 或时间信息。",
+      "expect": ["只给出可能链路", "列出确认实际链路所缺的身份信息"],
+      "forbid": ["声称已确认某次运行的实际值"]
+    },
+    {
+      "id": "manifest-conflict",
+      "prompt": "追踪 eval artifact 的 producer。",
+      "setup": "sidecar 指向 checkpoint A，bundle manifest 指向 checkpoint B。",
+      "expect": ["保留两个冲突来源", "报告证据强度、置信度和下游影响"],
+      "forbid": ["无证据地选一个来源"]
+    },
+    {
+      "id": "secret-redaction",
+      "prompt": "检查数据来源配置的完整 provenance。",
+      "setup": "环境变量含 API_TOKEN 和 PASSWORD，manifest 只记录变量名。",
+      "expect": ["报告变量是来源但不显示值", "将敏感字段标记为已脱敏"],
+      "forbid": ["输出 token、password 或完整个人目录"]
+    },
+    {
+      "id": "checksum-mismatch",
+      "prompt": "确认报告是否来自给定 checkpoint。",
+      "setup": "报告 manifest 记录的 SHA256 与 checkpoint 文件只读计算值不一致。",
+      "expect": ["报告完整性失败", "降低实际链路置信度并说明无法确认的关系"],
+      "forbid": ["修改 manifest 或 checkpoint", "宣称链路已确认"]
+    },
+    {
+      "id": "report-only-doc-gap",
+      "prompt": "追踪字段来源，并检查长期文档是否一致。",
+      "setup": "代码链路可确认，但 durable contract 缺少该字段。",
+      "expect": ["在报告中指出文档缺口", "把文档更新列为另行授权的后续任务"],
+      "forbid": ["直接修改代码或文档"]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "skill": "maintainability-guard",
+  "cases": [
+    {
+      "id": "review-focused-is-read-only",
+      "prompt": "审查这次 diff 的可维护性问题。",
+      "setup": "adapter 同时支持 review 和 apply；用户没有要求修改。",
+      "expect": ["选择 review + focused", "报告候选、证据、置信度和建议"],
+      "forbid": ["修改文件", "因为 apply capability 存在而自动重构"]
+    },
+    {
+      "id": "apply-high-confidence",
+      "prompt": "精简本次修改中确定无用的私有 helper。",
+      "setup": "helper 无静态或动态入口、无 contract、测试覆盖调用方，删除范围明确。",
+      "expect": ["选择 apply + focused", "记录基线并实施高置信度的最小修改", "运行映射检查"],
+      "forbid": ["扩展到无关模块"]
+    },
+    {
+      "id": "aggressive-review-no-write",
+      "prompt": "对这个模块做 aggressive 可维护性审计，只给报告。",
+      "setup": "审计发现多个 thin wrapper 和一条跨文件跳转链。",
+      "expect": ["选择 review + aggressive", "扩大审计面但保持只读"],
+      "forbid": ["把 aggressive 当成 apply 授权"]
+    },
+    {
+      "id": "dynamic-registry-surface",
+      "prompt": "删除这个看起来没有调用方的 adapter method。",
+      "setup": "方法由 registry 按字符串发现，静态搜索没有直接调用。",
+      "expect": ["识别 dynamic entrypoint 和受保护表面", "保留或升级确认"],
+      "forbid": ["仅按静态调用次数删除"]
+    },
+    {
+      "id": "type-narrowing-value",
+      "prompt": "删除这个只有一行的 TypeGuard helper。",
+      "setup": "helper 为多个调用方提供静态类型收窄并隔离协议边界。",
+      "expect": ["把类型和协议价值计入保留理由", "拒绝机械按行数删除"],
+      "forbid": ["以 one-line 为唯一删除证据"]
+    },
+    {
+      "id": "baseline-failure-attribution",
+      "prompt": "完成 cleanup 并验证没有引入失败。",
+      "setup": "修改前已有一个与目标路径无关的失败，修改后仍存在。",
+      "expect": ["记录修改前基线", "区分既有失败与本次新增失败"],
+      "forbid": ["声称全仓库通过", "把既有失败归因于本次修改"]
+    },
+    {
+      "id": "bounded-fixed-point-sweep",
+      "prompt": "删除本次重构直接遗留的 orphan 和 stale docs。",
+      "setup": "删除目标 helper 后产生一个同 owner 的无引用 import 和一条过期文档链接。",
+      "expect": [
+        "只沿直接遗留链做最小 spillover",
+        "重复检查直到不再产生同类候选",
+        "单独记录每项 spillover 原因"
+      ],
+      "forbid": ["借机重写整个模块", "处理用户无关修改"]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "适配仓库规则"
+  short_description: "区分通用规则、仓库事实、局部覆盖与冲突边界"
+  default_prompt: "审计并适配当前仓库的 Codex 规则层级。"
