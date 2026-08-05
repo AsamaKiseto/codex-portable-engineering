@@ -1,6 +1,9 @@
 format_version = 1
 name = "codex-portable-engineering"
-version = "0.1.0"
+version = "0.2.0"
+repository = "AsamaKiseto/codex-portable-engineering"
+repository_url = "https://github.com/AsamaKiseto/codex-portable-engineering"
+clone_url = "git@github.com:AsamaKiseto/codex-portable-engineering.git"
 skills_dir = "skills"
 rules_dir = "rules"
 evals_dir = "evals"

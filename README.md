@@ -22,9 +22,23 @@
 commit 和 source manifest，再写入 Codex 用户目录。当前仓库为 private，消费机器需要已配置的
 GitHub 访问凭据。
 
+安装 `skills/update-portable-engineering/` 后，可以在任意目录显式调用：
+
+```text
+$update-portable-engineering
+```
+
+该 Skill 直接查询本仓库最新稳定 GitHub Release，验证 tag、commit 和 source manifest，再安全
+更新用户级 `AGENTS.md` managed block 与本 source 管理的 Skills。它用用户级 receipt 识别受管
+内容；没有 receipt 的既有安装通过历史稳定 Release 的精确 digest 自动 adoption。人工修改、
+其它来源同名目录、损坏 marker、draft/prerelease 和默认分支都不会被静默接受。
+
+消费仓库 pin 继续服务可复现 bootstrap；日常用户级更新不要求先修改消费仓库参数。
+
 ## 适配边界
 
 - Skill 的仓库适配使用消费仓库自己的 `.agents/skill-adapters/`。
 - 规则适配使用 Codex 原生用户级、仓库根和目录级 `AGENTS.md` 继承链，不建立平行 rule-adapter
   schema。
 - `evals/` 只用于发布前验证，不复制到 `${CODEX_HOME:-$HOME/.codex}/skills`。
+- `update-portable-engineering` 只管理本 source 的用户级安装，不读取或更新消费仓库 adapter。

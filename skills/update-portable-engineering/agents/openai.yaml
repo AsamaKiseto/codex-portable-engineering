@@ -1,0 +1,4 @@
+interface:
+  display_name: "更新 Portable Engineering"
+  short_description: "从最新稳定发布安全更新用户级通用规则与全部 Skills"
+  default_prompt: "使用 $update-portable-engineering 更新用户级通用规则和 Skills。"
