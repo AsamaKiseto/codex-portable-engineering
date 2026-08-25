@@ -20,6 +20,9 @@ validation、ownership、digest、backup 和事务语义，不维护第二个 up
   安装或调用独立 updater。
 - Skill 的显式调用授权本 source 的用户级安装或升级。用户只要求检查时保持 read-only；显式指定
   历史 tag 导致降级时必须再次说明并取得确认。
+- source tree digest、rule digest 和 installed digest 是本安装信任边界的必要检查。Check-only 仍会
+  创建受控 staging/lock，因此 Stop That Shit Guard 生效时使用 observation-only `watch hash=allow`；
+  安装或更新使用 `change hash=allow`。`hash=allow` 不授权替换、删除或发布本 source 之外的内容。
 
 private repository 认证失败时停止并提示配置 `gh auth` 或 GitHub SSH；不得回退到公开镜像、缓存
 副本、默认分支或消费仓库 vendor copy，也不得输出 credential。
@@ -57,13 +60,13 @@ receipt 位于
   "format_version": 1,
   "source": {
     "repository": "AsamaKiseto/codex-portable-engineering",
-    "version": "0.2.1",
-    "tag": "v0.2.1",
+    "version": "<semver>",
+    "tag": "v<semver>",
     "commit_sha": "<40-hex>"
   },
   "rules": {
     "pack": "codex-engineering-baseline",
-    "version": "1.0.0",
+    "version": "<semver>",
     "sha256": "<rendered-body-sha256>"
   },
   "skills": {

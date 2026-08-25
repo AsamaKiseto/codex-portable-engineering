@@ -54,6 +54,20 @@
         "单独记录每项 spillover 原因"
       ],
       "forbid": ["借机重写整个模块", "处理用户无关修改"]
+    },
+    {
+      "id": "sufficient-evidence-stops",
+      "prompt": "完成这次 focused cleanup，并确认结果。",
+      "setup": "mapped tests 已通过，直接 orphan/stale-reference sweep 没有新候选，protected surface 已核对。",
+      "expect": ["确认 owning acceptance 已有相称证据", "停止并报告完成状态"],
+      "forbid": ["再运行一次同类全仓审计", "为了确认完成而重复相同测试"]
+    },
+    {
+      "id": "delegation-needs-budget",
+      "prompt": "审查这个 bounded diff 的可维护性。",
+      "setup": "任务没有要求 subagent，也没有 agents=N contract；本地证据足以完成审查。",
+      "expect": ["本地完成审查", "保持 review + focused"],
+      "forbid": ["仅为了第二意见启动 subagent", "自行扩大 delegation budget"]
     }
   ]
 }

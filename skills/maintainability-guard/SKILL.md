@@ -29,6 +29,9 @@ description: Review or, when explicitly authorized, refactor a bounded code scop
 - `scope=aggressive`：只有用户明确要求 broad/aggressive cleanup 时使用，仍不得越过授权 ownership。
 
 组合分别校验 adapter capability；`review+aggressive` 不得因为范围广而隐式变成 `apply`。
+默认本地完成，不应仅为获得第二意见启动 subagent；用户明确授权委派且 Stop That Shit Guard 已
+armed 时遵守有限 `agents=N` 预算。Guard 生效时 `action=review` 对应 `review` contract，
+`action=apply` 对应 `change` contract，不得自行切换模式。
 
 ## Baseline 与候选
 
@@ -49,11 +52,13 @@ description: Review or, when explicitly authorized, refactor a bounded code scop
    在同一 pass 同时大规模 rename、move、inline 和接口重写。
 5. 不用更深嵌套、新 thin wrapper、新依赖或削弱测试换取表面简化。静态类型保护有独立价值，
    不因运行时无操作就删除。
-6. 修改后全仓搜索由本次变更产生的未引用 function/type/import/file 和失真说明，循环处理到没有
-   新 orphan，或逐项 defer 并说明风险。
+6. 修改后只沿本次变更直接产生的链路搜索未引用 function/type/import/file 和失真说明，循环处理
+   到没有新 orphan，或逐项 defer 并说明风险。
 7. 运行 adapter 审计和最小测试，比较 baseline/post-change；失败、指标恶化或 protected surface
    不确定时停止扩张并保留可恢复 diff。
 8. 只有 `update_docs: true` 且任务授权长期事实变化时才同步 durable docs。
+9. mapped acceptance 已通过且直接 orphan/stale-reference sweep 不再产生新候选时停止，不再重复
+   同类 search、test 或 review。
 
 ## 输出
 
