@@ -13,6 +13,22 @@
 
 消费仓库的 repository adapter、路径、环境、测试命令、业务 contract 和 secret 不属于本仓库。
 
+## 可选任务 Guard
+
+本仓库的 always-on rules 和 repository-adapted Skills 可以与外部
+[`lennney/stop-that-shit`](https://github.com/lennney/stop-that-shit) Plugin 组合使用。Plugin 保持独立
+source ownership，本仓库不复制其同名 Skill、不接管其更新，也不把 host adapter 当作 repository
+adapter。需要 Guard 时固定稳定 tag 安装：
+
+```bash
+codex plugin marketplace add lennney/stop-that-shit --ref 0.1.0
+codex plugin add stop-that-shit@stop-that-shit
+```
+
+重启 Codex 后在 CLI TUI 用 `/hooks` 检查并 trust `UserPromptSubmit` 和 `PreToolUse`。窄任务默认保留
+`hash=deny`；release、provenance、integrity 和 portable install 等以 digest 为既有 acceptance 的任务
+显式使用 `hash=allow`，该授权不扩展其它任务边界。
+
 ## 版本与消费
 
 发布使用 SemVer tag。首次安装入口固定稳定 tag；入口自身校验最新稳定 Release 的 tag、commit
@@ -22,7 +38,7 @@
 
 ```text
 使用 $skill-installer 从
-https://github.com/AsamaKiseto/codex-portable-engineering/tree/v0.2.1/skills/install-portable-engineering
+https://github.com/AsamaKiseto/codex-portable-engineering/tree/v0.3.0/skills/install-portable-engineering
 安装 Skill
 ```
 

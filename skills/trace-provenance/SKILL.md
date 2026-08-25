@@ -23,6 +23,12 @@ description: Trace the authoritative source of a configuration value, data selec
 缺少 adapter、版本不兼容、Skill 名不匹配、marker 无效或 required capability 不为 `true` 时
 停止。Adapter 不能授予本 Skill 写入权限。
 
+## Optional task Guard
+
+读取 manifest 中已有 digest 不构成新的 hash 操作。需要重新计算文件 checksum 时，必须先验证
+`integrity_checks` capability；Stop That Shit Guard 已 armed 时还必须具有 `hash=allow` contract。
+`hash=allow` 不改变本 Skill 的 report-only、redaction 或 artifact read-only 边界。
+
 ## 输入身份
 
 追踪 actual run 前尽量绑定：
@@ -46,11 +52,14 @@ description: Trace the authoritative source of a configuration value, data selec
 5. 在组件边界核对 input、transform 和 output；必要时运行 adapter 允许的只读查询或完整性检查，
    不写入 run、cache、artifact 或仓库文件。
 6. 区分 cache reuse、materialization、recomputation、fallback、schema migration 和 unconfirmed
-   状态；校验可用的 schema version、digest/checksum、producer revision 和 manifest linkage。
+   状态；先比较已有 schema version、digest/checksum、producer revision 和 manifest linkage，只有
+   链路结论确实需要时才重新计算 checksum。
 7. 对 adapter 登记的 secret、credential、token、个人路径和敏感字段做脱敏；不得为了证明链路
    输出明文 secret 或无关个人信息。
 8. 与 durable contracts 交叉核对。证据冲突时并列报告各自来源、影响和未决条件，不静默选择。
    文档缺口只报告应更新的 owner，不在本 Skill 中修改。
+9. authoritative source、最终 consumers 和未决冲突已经获得相称证据后停止，不重复同一完整性检查
+   或候选来源扫描。
 
 ## Evidence ledger
 

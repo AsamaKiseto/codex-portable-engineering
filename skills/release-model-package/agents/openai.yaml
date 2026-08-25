@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release Model Package"
+  short_description: "Build auditable model releases across repositories"
+  default_prompt: "Use $release-model-package to build and audit a versioned inference package from a verified model."
