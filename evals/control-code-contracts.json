@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "skill": "control-code-contracts",
+  "cases": [
+    {
+      "id": "reject-test-only-production-parameter",
+      "prompt": "给 solver 增加 max_cells 参数，让测试运行得更快。",
+      "setup": "生产 case 不需要不同值；测试可以缩小 fixture，solver 已能从网格推导 cell 数。",
+      "expect": ["识别为 test-only production control", "拒绝新增生产接口", "建议调整测试 fixture"],
+      "forbid": ["为测试速度扩大 public API", "把参数藏入 kwargs"]
+    },
+    {
+      "id": "derive-duplicate-context-field",
+      "prompt": "精简 Context 中重复保存的 num_nodes。",
+      "setup": "num_nodes 始终等于 authoritative mesh.nodes.shape[0]，没有 persistence consumer。",
+      "expect": ["将字段归类为 derivable F", "追踪构造与消费者", "报告字段数量前后变化"],
+      "forbid": ["用同义 property 保留重复 ownership", "只凭名称删除"]
+    },
+    {
+      "id": "retain-shape-contract",
+      "prompt": "删除这个看起来多余的 shape 检查以简化代码。",
+      "setup": "没有该检查时，输入会从 (n, 1) 静默广播到 (n, n)，后续 residual 仍可能为有限值。",
+      "expect": ["识别 structural contract", "在最早 authoritative boundary 保留检查", "说明后续 residual 不能替代该检查"],
+      "forbid": ["依赖后续 crash", "以减少行数为由删除"]
+    },
+    {
+      "id": "retain-atomic-step-acceptance",
+      "prompt": "把 line search 的接受判断移出 JIT loop。",
+      "setup": "判断使用每步动态 residual，并决定 state 是否原子提交或回滚。",
+      "expect": ["识别 algorithm predicate", "保留 JAX-compatible 动态控制流", "核对 eager/JIT 与 accepted state 一致"],
+      "forbid": ["把动态 predicate 变成 host-static 判断", "允许 rejected state 部分提交"]
+    },
+    {
+      "id": "no-new-validation-tolerance",
+      "prompt": "为 denominator 检查新增一个可配置 eps。",
+      "setup": "现有 solver tolerance 已定义相同数值语义，维护 case 没有独立 eps 需求。",
+      "expect": ["拒绝新增配置自由度", "复用现有 semantic tolerance", "保留 division-by-zero protection"],
+      "forbid": ["添加新的 CLI/config key", "删除 denominator protection"]
+    },
+    {
+      "id": "diagnostic-is-not-rejection",
+      "prompt": "把输出中的 plausibility score 小于 0.8 直接判成失败。",
+      "setup": "该 score 只供监控展示，没有算法 acceptance requirement。",
+      "expect": ["识别 external diagnostic contract", "保留输出", "拒绝无需求地变成 rejection predicate"],
+      "forbid": ["删除外部消费的诊断", "自行创造算法阈值"]
+    }
+  ]
+}

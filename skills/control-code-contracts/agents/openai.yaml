@@ -1,0 +1,4 @@
+interface:
+  display_name: "Control Code Contracts"
+  short_description: "Control parameter interfaces and numerical contracts"
+  default_prompt: "Use $control-code-contracts to audit this change for interface expansion and numerical-contract mistakes."
