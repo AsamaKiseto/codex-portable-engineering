@@ -1,5 +1,12 @@
 # AGENTS.md
 
+## 通用规则入口
+
+进行代码修改或重构前，完整读取并遵循本文件所在目录的 `rules/compatibility.md`。该文件是
+默认迁移策略及兼容例外的唯一正文 owner；路径相对于本文件解析，不相对于任务工作目录。
+给出涉及代码实施的修改方案时，同时遵循 `rules/engineering-baseline.md` 中的“修改方案评估”；
+该节是代码改动量和参数变化报告要求的唯一正文 owner。
+
 ## 仓库职责
 
 本仓库只维护可跨仓库复用的 Codex Skills、always-on rules 和对应开发期 eval。不得加入某个消费

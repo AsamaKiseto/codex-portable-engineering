@@ -1,6 +1,6 @@
 format_version = 1
 name = "codex-portable-engineering"
-version = "0.4.0"
+version = "0.5.0"
 repository = "AsamaKiseto/codex-portable-engineering"
 repository_url = "https://github.com/AsamaKiseto/codex-portable-engineering"
 clone_url = "git@github.com:AsamaKiseto/codex-portable-engineering.git"

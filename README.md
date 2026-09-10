@@ -13,6 +13,18 @@
 
 消费仓库的 repository adapter、路径、环境、测试命令、业务 contract 和 secret 不属于本仓库。
 
+## 兼容策略
+
+默认直接迁移及兼容例外由 [`rules/compatibility.md`](rules/compatibility.md) 统一定义。
+源码仓库的 `AGENTS.md` 明确要求读取该文件；正式安装仍按 `rule-pack.toml` 将规则渲染到
+用户级 managed block，不为兼容策略新增 Skill 或另一套安装入口。
+
+rule pack `2.0.0` 将默认策略改为任务范围内直接迁移，替代“缺少退出条件就保留兼容层”。
+仍受支持的外部契约和未授权改变的业务行为继续受保护。规则源码引用不等于整包已安装；
+只有经过统一安装入口校验的 managed block 与 receipt 才能作为已发布安装的依据。
+同一版本还要求代码修改方案预先评估改动量并列出参数增删改，实施偏离估计时更新方案，完成时
+报告实际结果。
+
 ## 可选任务 Guard
 
 本仓库的 always-on rules 和 repository-adapted Skills 可以与外部
