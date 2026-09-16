@@ -1,6 +1,6 @@
 ---
 name: control-code-contracts
-description: Audit and refactor parameter ownership, configuration interfaces, contexts, and numerical validation without weakening structural contracts or algorithm predicates. Use when changing function or constructor parameters, dataclass/Context/Settings fields, configuration or CLI schemas, option whitelists, JAX/JIT kernel inputs, solver validation, acceptance logic, or scientific/numerical code; also use for parameter-bloat, ignored-configuration, forwarding-interface, duplicate-state, or excessive-check reviews. Do not use for edits that cannot affect an interface or a numerical contract.
+description: Audit parameter ownership and numerical contracts when changing interfaces, configuration schemas, solver validation, or acceptance logic, or when reviewing interface bloat. Keep the audit within the affected interfaces and direct consumers.
 ---
 
 # Control Code Contracts
@@ -9,11 +9,11 @@ Reduce real freedom, duplicate ownership, and forwarding layers while retaining 
 
 ## Establish evidence before editing
 
-1. Inspect repository instructions, the dirty worktree, maintained configurations, callers, consumers, tests, restart formats, and output contracts. Preserve unrelated work.
-2. Record baseline counts for public configuration keys, CLI flags, context/settings fields, long function signatures, and non-State data containers. Do not use line count alone as the interface metric.
+1. Inspect repository instructions and the dirty worktree, then read only configurations, callers, consumers, tests, restart formats, and output contracts affected by this task. Preserve unrelated work.
+2. For interface-reduction work, record before/after counts within the authorized scope. Broader inventories require a broader audit request; an ordinary interface edit needs only its affected parameter list. Do not use line count alone as the interface metric.
 3. Trace each candidate from construction to its final numerical or external consumer. Do not delete from names or reference counts alone.
 
-For every parameter or stored field, classify it as exactly one of:
+For each affected parameter or stored field and its direct consumers, classify it as one of:
 
 - A: per-step runtime state or forcing;
 - B: a physical, training, optimization, or experimental value that maintained cases genuinely vary;
@@ -27,7 +27,7 @@ Keep A and B as explicit typed interfaces. Let C and D have one host-side owner.
 
 ## Gate interface additions
 
-Before adding or retaining an interface, answer:
+Before adding or changing an interface, or retaining a candidate in an explicitly requested audit, answer:
 
 1. Who is the unique owner and final consumer?
 2. Which maintained cases require distinct values, or what explicit requirement demands it?
@@ -77,5 +77,5 @@ Report:
 - interfaces deleted, internalized, derived, retained, and added;
 - structural contracts and algorithm predicates retained or moved;
 - duplicate/speculative checks removed;
-- before/after interface counts;
+- before/after interface counts for interface-reduction work, otherwise the affected parameter list;
 - numerical, JIT, and restart verification performed and any unverified scope.

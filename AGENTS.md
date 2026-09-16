@@ -2,31 +2,18 @@
 
 ## 通用规则入口
 
-进行代码修改或重构前，完整读取并遵循本文件所在目录的 `rules/compatibility.md`。该文件是
+接口、配置、模块迁移或兼容处理涉及变更时，读取并遵循本文件所在目录的 `rules/compatibility.md`。该文件是
 默认迁移策略及兼容例外的唯一正文 owner；路径相对于本文件解析，不相对于任务工作目录。
 给出涉及代码实施的修改方案时，同时遵循 `rules/engineering-baseline.md` 中的“修改方案评估”；
 该节是代码改动量和参数变化报告要求的唯一正文 owner。
+选择验证范围和完成标准时，参考同目录 `rules/verification.md`，按本任务风险执行相关检查。
 
-## 仓库职责
+## 任务范围
 
-本仓库只维护可跨仓库复用的 Codex Skills、always-on rules 和对应开发期 eval。不得加入某个消费
-仓库的 adapter、绝对路径、环境名称、测试命令、内部 contract、secret 或业务事实。
+- 仓库职责、环境、命令和领域契约以目标仓库及最近目录的规则为准。
+- 按本次任务需要选读文档和 Skill 引用；已有且仍有效的阅读与验证证据可复用。
+- 检查完整工作区以保护已有修改；实施与验收只覆盖本任务及直接影响，不接管无关改动。
+- 需求齐备且动作已获授权时持续完成；只在缺失信息会影响正确性、权限或交付要求时暂停。
 
-## 布局
-
-- `skills/`：可安装 Skill 的版本化源码；目录名必须与 `SKILL.md` frontmatter `name` 相同。
-- `rules/`：通用规则源码；`rule-pack.toml` 固定 module 顺序和 rule pack 版本。
-- `evals/`：portable Skill 的开发期行为场景，不随 Skill 安装。
-- `portable-source.toml`：整个发布包的版本与目录 contract。
-- `install-portable-engineering` 可以固定本仓库的 canonical GitHub identity；其它 Skill 仍不得嵌入
-  消费仓库事实。
-
-## 变更要求
-
-- 修改 Skill 时校验 `SKILL.md` 和 `agents/openai.yaml`，必要时同步同名 eval。
-- 统一安装入口变更必须验证首次安装、historical-release adoption、已有 receipt 更新、本地修改
-  拒绝、规则 managed block 保留、旧 updater 的受限迁移和 self-update-last 事务顺序。
-- 修改规则时保持规则与消费仓库事实分离，并重新校验精确渲染 SHA256。
-- 发布使用 SemVer tag；已经被消费仓库固定的 tag 不得移动或重写。
-- 用户首次安装入口时必须固定稳定 tag；入口自身的日常更新只选择最新稳定 Release，不跟随默认
-  分支。
+维护本文件相邻的通用规则包或 Skills 源码时，源码专用要求见同目录 `README.md` 的“源码维护”；
+这些发布仓库要求不适用于消费仓库。

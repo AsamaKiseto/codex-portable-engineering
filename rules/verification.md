@@ -3,6 +3,8 @@
 - 优先修改既有 owning tests 和 durable docs；不为 helper 实现细节新增低价值测试或平行文档。
 - 运行与风险和 touched ownership 相称的最小检查；局部检查不得描述成全仓库通过，无法运行的
   检查必须说明原因。
+- 纯说明性注释或文档修改通过内容核对验证；仅在可执行示例、doctest 或运行行为受影响时运行
+  对应测试。测试层级和回归触发条件遵循仓库唯一验证 owner，Skill 和 adapter 不另设相反门槛。
 - 当 owning acceptance 已有与风险相称的证据，且本次变更没有继续产生直接 orphan、stale
   reference 或未验证 contract 时，停止重复搜索、测试和 review；不新增只用于再次确认完成状态的
   审计循环。

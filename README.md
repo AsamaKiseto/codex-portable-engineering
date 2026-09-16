@@ -16,7 +16,7 @@
 ## 兼容策略
 
 默认直接迁移及兼容例外由 [`rules/compatibility.md`](rules/compatibility.md) 统一定义。
-源码仓库的 `AGENTS.md` 明确要求读取该文件；正式安装仍按 `rule-pack.toml` 将规则渲染到
+源码仓库的 `AGENTS.md` 在涉及兼容与迁移时指向该文件；正式安装仍按 `rule-pack.toml` 将规则渲染到
 用户级 managed block，不为兼容策略新增 Skill 或另一套安装入口。
 
 rule pack `2.0.0` 将默认策略改为任务范围内直接迁移，替代“缺少退出条件就保留兼容层”。
@@ -24,6 +24,21 @@ rule pack `2.0.0` 将默认策略改为任务范围内直接迁移，替代“�
 只有经过统一安装入口校验的 managed block 与 receipt 才能作为已发布安装的依据。
 同一版本还要求代码修改方案预先评估改动量并列出参数增删改，实施偏离估计时更新方案，完成时
 报告实际结果。
+
+## 源码维护
+
+本节仅适用于本发布仓库，不作为消费仓库的全局职责或布局规则。
+
+- 本仓库只维护可复用的 Skills、通用规则及开发期 eval，不嵌入消费仓库的 adapter、环境、
+  测试命令、内部契约、绝对路径或 secret。统一安装入口可以固定本 source 的 canonical GitHub identity。
+- `skills/` 目录名与 `SKILL.md` 的 `name` 一致；修改时校验正文和已有的 `agents/openai.yaml`，
+  行为变化按需同步同名 eval。`evals/` 不随 Skill 安装。
+- `rules/rule-pack.toml` 拥有 module 顺序和版本；规则变更后重新校验精确渲染 SHA256。
+  `portable-source.toml` 拥有发布包版本及目录 contract；本地源码修改不代表已发布或已安装受管包。
+- 统一安装入口变更须验证首次安装、historical-release adoption、receipt 更新、本地修改拒绝、
+  managed block 保留、旧 updater 受限迁移及 self-update-last 事务顺序。
+- 发布使用 SemVer tag，已被消费仓库固定的 tag 不得移动或重写。首次安装入口固定稳定 tag，
+  后续更新只选择最新稳定 Release，不跟随默认分支。
 
 ## 可选任务 Guard
 

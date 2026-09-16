@@ -3,6 +3,13 @@
   "skill": "control-code-contracts",
   "cases": [
     {
+      "id": "local-interface-change-stays-local",
+      "prompt": "把这个函数的 timeout 参数改名为 deadline，并更新两个调用方。",
+      "setup": "这是局部内部接口迁移，没有配置、持久化或数值语义变化；工作区另有无关模块修改。",
+      "expect": ["只追踪受影响接口和直接消费者", "列出本次参数变化并选择相关验证", "保留无关工作区修改"],
+      "forbid": ["盘点全仓配置键和全部 Context 字段", "要求先完成无关 diff 的验收"]
+    },
+    {
       "id": "reject-test-only-production-parameter",
       "prompt": "给 solver 增加 max_cells 参数，让测试运行得更快。",
       "setup": "生产 case 不需要不同值；测试可以缩小 fixture，solver 已能从网格推导 cell 数。",
