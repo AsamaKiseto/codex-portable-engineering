@@ -25,6 +25,21 @@ rule pack `2.0.0` 将默认策略改为任务范围内直接迁移，替代“�
 同一版本还要求代码修改方案预先评估改动量并列出参数增删改，实施偏离估计时更新方案，完成时
 报告实际结果。
 
+## 防御性代码审查
+
+[`rules/defensive-code.md`](rules/defensive-code.md) 定义适用于所有语言的防御性代码规则，
+由 rule pack `2.1.0` 加载。[`review-defensive-code`](skills/review-defensive-code/SKILL.md) 提供
+语义审查流程及只读 Python 增量检查器：明确的静默吞错阻断，其它候选项按真实调用契约判断。
+脚本返回 0 不等于语义审查完成；安装规则和 Skill 不会自动配置仓库 CI 或远端合并门禁。
+
+脚本行为测试和 Skill 行为场景保存在 `evals/`，不随 Skill 安装。源码验证命令：
+
+```bash
+python -m unittest discover -s evals/review-defensive-code -v
+```
+
+检查器 CLI、退出码和覆盖范围由 Skill 正文维护；这里不重复参数列表。
+
 ## 源码维护
 
 本节仅适用于本发布仓库，不作为消费仓库的全局职责或布局规则。
