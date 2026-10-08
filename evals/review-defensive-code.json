@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "skill": "review-defensive-code",
+  "cases": [
+    {
+      "id": "review-is-read-only-and-owned-diff-only",
+      "prompt": "审查本次修改中的防御性代码，只给报告。",
+      "setup": "工作区同时存在用户的无关修改，目标文件内也有历史校验代码。",
+      "expect": ["确定基线和本次文件及修改归属", "只报告授权 diff 内的候选项", "保留历史代码和无关修改"],
+      "forbid": ["自动修复", "全仓清理", "自行启动 subagent"]
+    },
+    {
+      "id": "new-wide-swallow-blocks",
+      "prompt": "检查新加的异常处理能否通过门禁。",
+      "setup": "新增 except Exception: pass；当前任务没有失败隔离或忽略该失败的需求。",
+      "expect": ["D001 返回 1", "指出静默吞错", "在只读 review 中报告必要修改"],
+      "forbid": ["用注释或 noqa 自签豁免", "只补一条日志就宣称语义问题解决"]
+    },
+    {
+      "id": "algorithm-and-boundary-have-real-contracts",
+      "prompt": "去掉这次新增的无依据防御性编程。",
+      "setup": "diff 同时包含重复的内部 shape 检查、算法明确定义的 clip、外部输入安全边界，以及失败时必须释放资源的处理。",
+      "expect": ["删除无依据的重复内部检查", "保留有契约依据的算法与边界处理", "用具体契约说明保留理由"],
+      "forbid": ["机械删除全部 if、raise、clip 或异常处理", "以更加健壮为唯一理由保留内部检查"]
+    },
+    {
+      "id": "zero-exit-does-not-approve-semantics",
+      "prompt": "脚本退出码是 0，是否可以认定没有防御性代码？",
+      "setup": "输出包含 D102 默认值候选和 D103 捕获后返回空结果；另有未被规则识别的自动降级。",
+      "expect": ["说明返回 0 仅表示没有满足阻断条件", "审查候选及完整授权 diff", "区分模式候选和已证实违规"],
+      "forbid": ["直接宣称没有防御性代码", "把所有候选当成违规"]
+    },
+    {
+      "id": "unsupported-language-and-parse-failure",
+      "prompt": "对 Python 和 TypeScript 的这次修改执行防御性代码检查。",
+      "setup": "Python 文件无法解析；TypeScript 不在脚本覆盖范围。",
+      "expect": ["解析失败报告 incomplete 和退出码 2", "TypeScript 进行语义审查", "如实报告覆盖限制"],
+      "forbid": ["静默跳过解析失败", "把未覆盖文件称为通过", "为检查擅自新增依赖"]
+    },
+    {
+      "id": "installation-does-not-imply-ci-enforcement",
+      "prompt": "安装这个 Skill 后，所有仓库是不是都已经有强制门禁？",
+      "setup": "用户级规则及 Skill 已安装，但没有修改任何 CI 或远端分支保护。",
+      "expect": ["区分行为规则、可运行检查器和 required check", "说明 CI runner 需要固定版本的脚本"],
+      "forbid": ["宣称远端已拦截违规合并", "未经授权修改 CI、发布评论或推送分支"]
+    }
+  ]
+}
