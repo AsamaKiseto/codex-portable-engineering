@@ -1,6 +1,6 @@
 ---
 name: adapt-rules
-description: 分析当前或指定仓库的 Codex 规则链，把规则区分为用户级通用基线、仓库专用事实、目录局部约束和显式覆盖，并在有可靠证据时更新仓库 `AGENTS.md`。用户要求迁移、适配、精简、去重或审计仓库规则时使用；不创建平行 rule-adapter schema，也不把 prose rule 写入 command policy 文件。
+description: 分析 Codex 用户级与当前或指定仓库的规则链，区分通用基线、仓库事实、局部约束和显式覆盖；按用户指定层级更新通用规则 source 或仓库 AGENTS.md。用户要求推广、迁移、适配、精简、去重或审计规则时使用；不创建平行 rule-adapter schema，也不把 prose rule 写入 command policy 文件。
 ---
 
 # Adapt Rules
@@ -11,7 +11,9 @@ repository adapter。
 
 ## 前置检查
 
-1. 确认目标仓库根，检查 dirty worktree，保留用户已有修改。
+1. 先确认用户要求的规则层级。“适用于所有仓库”“用户级根规则”指向 Codex 用户级 `AGENTS.md`
+   及其通用规则 source，不默认指向当前工作目录的仓库根；只说“根目录”时结合上下文和仓库身份判断，
+   仍有歧义才澄清。确认目标仓库根，检查 dirty worktree，保留用户已有修改。
 2. 读取用户级 `AGENTS.md`、仓库根到目标路径之间的所有 `AGENTS.md`，以及这些文件明确引用的
    rules、workflows、knowledge map 和长期 policy owner。
 3. 若仓库提供 portable rule manifest，一并读取；不得假设所有仓库使用同一目录布局。
@@ -40,13 +42,20 @@ repository adapter。
 1. 先建立规则 inventory 和生效优先级，记录每条规则的 owner。
 2. 仅当用户级受管区块 digest 有效，且仓库条目与其中规则语义完全等价、没有更窄范围或额外
    约束时，才从仓库层删除重复正文。
-3. 将仓库路径、环境、测试、owner、contract、runtime 和完成标准保留在仓库根规则。
+3. 将仓库路径、环境、测试分层/命令、具体 owner、领域 contract、runtime 和领域完成标准保留在
+   仓库根规则或其引用的既有正文；通用的方案评估、文档覆盖、唯一正文和验证原则由用户级规则拥有。
 4. 将子系统不变量和 escalation trigger 保留或移动到最近的目录级规则；移动前检查所有受影响
    路径，避免缩小或扩大作用域。
 5. 显式冲突保留为仓库 override，说明它覆盖哪项 baseline、为什么、适用范围和解除条件。
 6. 更新规则发现、安装和 ownership 的既有 durable doc；既有 owner 能承载时不新建重复文档。
 7. 校验最终 `AGENTS.md` 链：通用事实只有一个 owner，仓库事实不进入用户级 block，局部事实
    不上浮，引用路径真实存在。
+
+用户明确要求将规则用于所有仓库时，在已确认的通用规则 source 中修改现有正文、根入口和版本，
+按 manifest 顺序校验精确渲染摘要。推广原则时保留边界和例外，不复制消费仓库的路径、命令或领域值。
+精简入口须给出明确的细则读取触发条件，并逐条核对原要求的去向；行数目标不能削弱约束。
+区分源码更新、远端推送和稳定 Release 安装，按用户实际授权执行；源码检出位于用户级目录时
+可维护其直接引用的入口，不伪造安装 receipt，也不因源码已更新就删除其它仓库尚未验证的重复规则。
 
 ## 不采用的结构
 

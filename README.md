@@ -13,6 +13,24 @@
 
 消费仓库的 repository adapter、路径、环境、测试命令、业务 contract 和 secret 不属于本仓库。
 
+## 通用规则入口与归属
+
+用户级 `AGENTS.md` 及规则包适用于所有代码仓库，Skill 不是这些要求生效的前提。源码检出位于
+用户级目录时，根 `AGENTS.md` 按任务触发读取相邻规则正文；正式安装按 manifest 渲染受管区块。
+根入口保持简短，完整细则按下表唯一维护，不为缩短入口删除约束、例外或读取时机。
+
+| 正文 | 拥有的通用要求 |
+| --- | --- |
+| `rules/task-boundaries.md` | 授权、范围和额外设计边界 |
+| `rules/engineering-baseline.md` | 工程职责、算例脚本边界、改动量与参数变化报告 |
+| `rules/commenting.md` | 注释表达、当前正文与历史决定的边界 |
+| `rules/verification.md` | 模块文档覆盖、唯一正文、内容核对、测试准入和验收报告 |
+
+兼容、防御性代码及参数/数值契约分别由对应模块拥有，模块顺序见 `rules/rule-pack.toml`。
+仓库只补充实际源码范围、路径、环境、领域契约、测试分层和命令，以及有明确范围的覆盖；
+不把特定项目的物理门槛、目录布局或数值测试策略写成所有仓库的固定要求。
+源码包 `0.7.0` 对应 rule pack `2.2.0`；推送 `main` 不等于发布稳定 Release 或更新其它机器的安装。
+
 ## 兼容策略
 
 默认直接迁移及兼容例外由 [`rules/compatibility.md`](rules/compatibility.md) 统一定义。

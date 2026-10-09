@@ -1,6 +1,6 @@
 format_version = 1
 name = "codex-engineering-baseline"
-version = "2.1.0"
+version = "2.2.0"
 target = "global_agents_managed_block"
 modules = [
   "engineering-baseline.md",

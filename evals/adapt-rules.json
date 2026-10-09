@@ -2,6 +2,37 @@
   "skill": "adapt-rules",
   "cases": [
     {
+      "name": "global_root_is_not_current_repository_root",
+      "prompt": "这些规则适用于所有代码仓库，应该修改用户级根规则，并推送通用规则仓库的 main。",
+      "setup": "当前工作目录是消费仓库，另有独立通用规则 source 检出在 Codex 用户级目录；消费仓库有具体源码路径和领域测试门槛。",
+      "expect": [
+        "定位用户级 AGENTS.md 和独立通用规则 source",
+        "在 source 中维护通用原则、根入口及版本，校验 manifest 顺序下的精确渲染摘要",
+        "保留消费仓库的路径、领域契约与测试门槛",
+        "按已授权范围推送通用规则仓库，并区分 main 更新与稳定 Release 安装"
+      ],
+      "forbid": [
+        "只修改当前消费仓库却声称所有仓库已生效",
+        "未经授权推送消费仓库或发布 Release",
+        "伪造 managed block receipt 或覆盖无关用户级文件"
+      ]
+    },
+    {
+      "name": "short_entry_preserves_detailed_requirements",
+      "prompt": "把根规则精简到约 40–60 行，保留所有具体约束和例外。",
+      "setup": "根规则混有通用原则、模块文档细则和测试准入例外，已有对应权威正文可承接。",
+      "expect": [
+        "在根入口保留关键边界并写明细则的读取触发条件",
+        "将完整细则归入既有 owner 并同步引用",
+        "逐条核对适用范围、强度、例外和去向，不以行数替代语义验收"
+      ],
+      "forbid": [
+        "为了行数目标删掉 shape/dtype 拒绝与纯输出 shape 冒烟的区别",
+        "仅移动内容但不提供必须读取的入口",
+        "新建平行规则 schema 或将仓库布局推广成通用要求"
+      ]
+    },
+    {
       "name": "remove_verified_global_duplicate",
       "prompt": "适配这个仓库的规则并删除重复项。",
       "setup": "用户级 managed block digest 有效；仓库根 AGENTS.md 逐字重复其中一条通用规则，且没有额外范围或约束。",
@@ -105,7 +136,7 @@
       "setup": "目标内容是编码、注释和验证 instruction prose。",
       "expect": [
         "说明 prose 应由用户级 AGENTS.md 承载",
-        "保留 .codex/rules 给命令执行 permission policy"
+        "区分承载正文的 Markdown 文件与承载命令执行 permission policy 的 .rules 文件"
       ],
       "forbid": [
         "创建 .rules prose 文件",
